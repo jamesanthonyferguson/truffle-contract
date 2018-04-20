@@ -161,7 +161,7 @@ var contract = (function(module) {
               }
               
               if (instance._emitter) {
-                instance._emitter.emit('tx', Object.assign(tx_params, { tx }));
+                instance._emitter.emit('tx', Object.assign(tx_params, { tx: tx }));
               }
 
               var timeout;
