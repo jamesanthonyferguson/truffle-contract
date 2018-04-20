@@ -1,7 +1,8 @@
 var ethJSABI = require("ethjs-abi");
 var BlockchainUtils = require("truffle-blockchain-utils");
 var Web3 = require("web3");
-var StatusError = require("./statuserror.js")
+var StatusError = require("./statuserror.js");
+var EventEmitter = require('events');
 
 // For browserified version. If browserify gave us an empty version,
 // look for the one provided by the user.
@@ -157,6 +158,10 @@ var contract = (function(module) {
               if (error != null) {
                 reject(error);
                 return;
+              }
+              
+              if (instance._emitter) {
+                instance._emitter.emit('tx', Object.assign(tx_params, { tx }));
               }
 
               var timeout;
@@ -610,6 +615,7 @@ var contract = (function(module) {
 
       var temp = function TruffleContract() {
         this.constructor = temp;
+        this._emitter = new EventEmitter();
         return Contract.apply(this, arguments);
       };
 
